@@ -8,5 +8,8 @@
 	- turn on developer mode
 	- go to discord dev portal and make new app
 	- add a bot & save its token
+	- make a new server and make a channel called whale in it
+	- make a new role called whale
 	- add the bot to your server
+6.
 

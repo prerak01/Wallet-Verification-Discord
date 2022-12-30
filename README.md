@@ -1,5 +1,7 @@
 # Instructions
 
+## Setup
+
 1. init empty github file  *optional*
 2. install discord.js
 3. *optional* - add node_modules to .gitignore
@@ -16,4 +18,9 @@
 		(+) choose the permissions that are needed by the bot
 	- make invite link and add the bot to server
 7. make a wallet verification channel
-8. _optional_
+8. **optional for security** -  add the token to a config file and add config file in .gitignore
+
+
+## Start Coding the bot
+
+1. 

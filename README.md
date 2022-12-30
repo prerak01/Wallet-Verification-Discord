@@ -8,3 +8,5 @@
 	- turn on developer mode
 	- go to discord dev portal and make new app
 	- add a bot & save its token
+	- add the bot to your server
+

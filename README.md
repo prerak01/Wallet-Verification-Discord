@@ -10,6 +10,10 @@
 	- add a bot & save its token
 	- make a new server and make a channel called whale in it
 	- make a new role called whale
-	- add the bot to your server
-6.
+6. Adding the bot to your server
+	- go to ouath2 link generator
+	- choose bot and applications.commands
+		(+) choose the permissions that are needed by the bot
+	- make invite link and add the bot to server
+7. make a wallet verification channel
 

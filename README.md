@@ -19,8 +19,10 @@
 	- make invite link and add the bot to server
 7. make a wallet verification channel
 8. **optional for security** -  add the token to a config file and add config file in .gitignore
-
+9. Design decision - will be using a file based database - neDB
 
 ## Start Coding the bot
 
-1. 
+### Initial
+1. Boilerplate code to get it started
+2. Important to choose which intents the bot needs - need to be added when authorizing the bot. Intents determine which events will be sent to the bot

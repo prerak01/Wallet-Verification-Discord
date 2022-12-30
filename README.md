@@ -16,4 +16,4 @@
 		(+) choose the permissions that are needed by the bot
 	- make invite link and add the bot to server
 7. make a wallet verification channel
-
+8. _optional_

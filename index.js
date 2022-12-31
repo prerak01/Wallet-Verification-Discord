@@ -9,6 +9,8 @@ const {ButtonHandler} = require('./EventHandling/button.js');
 verificationQueue = {} // will contain all the users which are in the queue to be verified
 
 
+
+
 client.once(Events.ClientReady, c => {
 	console.log(`Ready! Logged in as ${c.user.tag}`);
 

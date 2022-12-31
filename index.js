@@ -6,7 +6,7 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 //part 2
 const {ButtonHandler} = require('./EventHandling/button.js');
-
+verificationQueue = {} // will contain all the users which are in the queue to be verified
 
 
 client.once(Events.ClientReady, c => {
@@ -27,7 +27,9 @@ async function sendVerifyMessage(){
 		allChannels = await curGuild.channels.fetch();
 		allChannels.forEach(async function(value,key,map){
 			var curChannel = value;
-			if(curChannel.type==0 && curChannel.name=="wallet_verification"){ // type 0  is for Guild Text based channels
+			if (curChannel.type!=0 || curChannel.name!="wallet_verification")
+				return;
+			 // type 0  is for Guild Text based channels
 				const row = new ActionRowBuilder()
 				.addComponents(
 				new ButtonBuilder()
@@ -36,21 +38,20 @@ async function sendVerifyMessage(){
 					.setStyle(ButtonStyle.Primary),
 			);
 			// check message history
-			if((await curChannel.messages.fetch()).size==0) // no verification messages have been sent earlier
+
+			if((await curChannel.messages.fetch()).size==0){ // no verification messages have been sent earlier
 				curChannel.send({content:'click to verify your wallet',components:[row]});
+			}
 
-			} 
-				
+
+			//for testing delete all current messages and then send a new one
+//			console.log((await curChannel.messages.fetch()))		
 		});
-
 	});
-
-
-	
 }
 
 // part 2
-ButtonHandler(client);
+ButtonHandler(client,verificationQueue);
 
 
 

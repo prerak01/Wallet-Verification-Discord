@@ -23,4 +23,6 @@
 
 ## Start Coding the bot
 
-1. 
+1. import the keys and required objects
+2. on client ready, send a hello world to stdout, then iterate through all the guilds the bot is in
+3.

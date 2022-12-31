@@ -4,6 +4,8 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js'); 
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
+//part 2
+const {ButtonHandler} = require('./EventHandling/button.js');
 
 
 
@@ -46,6 +48,11 @@ async function sendVerifyMessage(){
 
 	
 }
+
+// part 2
+ButtonHandler(client);
+
+
 
 // function logs into 
 

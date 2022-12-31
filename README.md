@@ -31,4 +31,10 @@
 3. check for channel wallet_verification and send a message if not already sent
 
 ## Ideally be part 2
-4. make a new directory, add file for button interaction handling there
+
+**Will only allow one discord account to be linked with one wallet, no backsies**
+
+1. make a new directory, add file for button interaction handling there
+2. after button interaction, maker a personal thread with the person who pressed button.
+3. Database needs to be instantiated and passed to this button handler
+4. If person is already present in database , then exit thread

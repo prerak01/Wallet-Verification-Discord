@@ -32,7 +32,10 @@
 
 ## Ideally be part 2 of the tutorial 
 
-**Will only allow one discord account to be linked with one wallet, no backsies**
+Assuming addresses to be shelley since stakeAddress  is used to identify unique addresses.
+One Wallet can have any number of discord accounts associated with it but one discord can only have one wallet associated with it.
+Delinking of wallets is not allowed.
+
 1. install nedb and instantiate it
 2. make a new directory, add file for button interaction handling there
 3. after button interaction, maker a personal thread with the person who pressed button.

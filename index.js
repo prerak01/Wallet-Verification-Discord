@@ -22,7 +22,7 @@ client.once(Events.ClientReady, c => {
 	console.log(`Ready! Logged in as ${c.user.tag}`);
 
 	sendVerifyMessage();
-	ButtonHandler(client,verificationQueue); // handles request to verify
+	ButtonHandler(client,verificationQueue,db); // handles request to verify
 });
 
 async function sendVerifyMessage(){

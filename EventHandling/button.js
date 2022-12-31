@@ -3,12 +3,14 @@ const {Events,ModalBuilder} =  require('discord.js');
 
 
 module.exports = {
-	ButtonHandler: async function(client,verificationQueue){
+	ButtonHandler: async function(client,verificationQueue,db){
 
 		client.on(Events.InteractionCreate,interaction=>{
 
 			if(!interaction.isButton()) return;
-				interaction.deferReply();
+			// checking presence of wallet
+			
+				
 
 
 		});

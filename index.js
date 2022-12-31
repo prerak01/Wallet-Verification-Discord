@@ -1,5 +1,6 @@
 const {Client, Events, GatewayIntentBits} = require('discord.js')
 const { token } = require('./.config.json');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js'); // for the button in verify
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -25,7 +26,14 @@ async function sendVerifyMessage(){
 		allChannels.forEach(async function(value,key,map){
 			var curChannel = value;
 			if(curChannel.type==0 && curChannel.name=="wallet_verification"){ // type 0  is for Guild Text based channels
-				value.send("why me ?");
+				const row = new ActionRowBuilder()
+				.addComponents(
+				new ButtonBuilder()
+					.setCustomId('primary')
+					.setLabel('Click me!')
+					.setStyle(ButtonStyle.Primary),
+			);
+			curChannel.send({content:'click to verify',components:[row]});
 
 			} 
 				
@@ -37,8 +45,6 @@ async function sendVerifyMessage(){
 	
 }
 
-
 // function logs into 
-
 
 client.login(token);

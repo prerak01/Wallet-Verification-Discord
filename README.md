@@ -29,3 +29,6 @@
 1. import the keys and required objects
 2. on client ready, send a hello world to stdout, then iterate through all the guilds the bot is in
 3. check for channel wallet_verification and send a message if not already sent
+
+## Ideally be part 2
+4. make a new directory, add file for button interaction handling there

@@ -30,10 +30,12 @@ async function sendVerifyMessage(){
 				.addComponents(
 				new ButtonBuilder()
 					.setCustomId('primary')
-					.setLabel('Click me!')
+					.setLabel('verify!')
 					.setStyle(ButtonStyle.Primary),
 			);
-			curChannel.send({content:'click to verify',components:[row]});
+			// check message history
+			if((await curChannel.messages.fetch()).size==0) // no verification messages have been sent earlier
+				curChannel.send({content:'click to verify your wallet',components:[row]});
 
 			} 
 				

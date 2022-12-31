@@ -20,8 +20,9 @@
 7. make a wallet verification channel
 8. Add another user which would initially be unable to view the whale channel
 9. **optional for security** -  add the token to a config file and add config file in .gitignore
-10. **PENDING**
-	- what permissions should be there for the verify_wallet channel
+10.
+	- make channel read only for everyone
+	- give the bot all permissions inside the channel
 
 ## Start Coding the bot
 

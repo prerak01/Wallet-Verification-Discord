@@ -16,5 +16,5 @@ module.exports = {
 }
 
 async function getWalletForm(){ // form to get wallet information from user
-	const modal 	
+	
 }

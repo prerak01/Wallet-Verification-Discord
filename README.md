@@ -33,8 +33,8 @@
 ## Ideally be part 2 of the tutorial 
 
 **Will only allow one discord account to be linked with one wallet, no backsies**
-
-1. make a new directory, add file for button interaction handling there
-2. after button interaction, maker a personal thread with the person who pressed button.
-3. Database needs to be instantiated and passed to this button handler
-4. If person is already present in database , then exit thread
+1. install nedb and instantiate it
+2. make a new directory, add file for button interaction handling there
+3. after button interaction, maker a personal thread with the person who pressed button.
+4. Database needs to be instantiated and passed to this button handler
+5. If person is already present in database , then exit thread

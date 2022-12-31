@@ -8,6 +8,13 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const {ButtonHandler} = require('./EventHandling/button.js');
 verificationQueue = {} // will contain all the users which are in the queue to be verified
 
+//database intialization
+const DataStore=require('nedb');
+var db = new DataStore({
+	filename:'database.db',
+	autoload:true
+});
+console.log("database initialized");
 
 
 
@@ -15,11 +22,11 @@ client.once(Events.ClientReady, c => {
 	console.log(`Ready! Logged in as ${c.user.tag}`);
 
 	sendVerifyMessage();
+	ButtonHandler(client,verificationQueue); // handles request to verify
 });
 
 async function sendVerifyMessage(){
 	const allGuilds = await client.guilds.fetch(); // map object (Snowflake,OAuth2 guild)
-
 	// iterate through all OuthA2guilds now
 	allGuilds.forEach(async function(value,key,map){
 		var curGuild = await value.fetch(); // fetches guild structure
@@ -40,12 +47,9 @@ async function sendVerifyMessage(){
 					.setStyle(ButtonStyle.Primary),
 			);
 			// check message history
-
 			if((await curChannel.messages.fetch()).size==0){ // no verification messages have been sent earlier
 				curChannel.send({content:'click to verify your wallet',components:[row]});
 			}
-
-
 			//for testing delete all current messages and then send a new one
 //			console.log((await curChannel.messages.fetch()))		
 		});
@@ -53,7 +57,7 @@ async function sendVerifyMessage(){
 }
 
 // part 2
-ButtonHandler(client,verificationQueue);
+
 
 
 

@@ -33,11 +33,10 @@
 ## Ideally be part 2 of the tutorial 
 
 Assuming addresses to be shelley since stakeAddress  is used to identify unique addresses.
-One Wallet can have any number of discord accounts associated with it but one discord can only have one wallet associated with it.
-Delinking of wallets is not allowed.
+one wallet should only be associated with one discord account and vice versa.
 
 1. install nedb and instantiate it
 2. make a new directory, add file for button interaction handling there
-3. after button interaction, maker a personal thread with the person who pressed button.
+3. after button interaction, a popup should come for user for wallet verification
 4. Database needs to be instantiated and passed to this button handler
 5. If person is already present in database , then exit thread

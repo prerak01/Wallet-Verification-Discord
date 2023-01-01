@@ -46,5 +46,6 @@ Assumption that the user will be submitting the right address and not some mumbo
 - member should be added to verification queue on pressing verify button abd inputting the address
 - On getting added to verification queue, following tests should take place for the modal submission
 	- presence of user in queue
-	- presence of user in database **ne documents will contain two fields = _id and address which will contain user tag and stakeAddress respectively**
+	- presence of user in database 
+	**database documents will contain two fields = _id and address which will contain user tag and stakeAddress respectively**
 	- presence of address in database - addresses will be

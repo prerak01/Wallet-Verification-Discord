@@ -7,27 +7,40 @@ module.exports = {
 		// wallet verification popup on button press
 		client.on(Events.InteractionCreate,async interaction=>{
 			if(!interaction.isButton()) return;
+			// add person in verification queue
+
 			await interaction.showModal(await getModal());
 		});
 		// event after wallet has been submitted
 		client.on(Events.InteractionCreate,async interaction=>{
 			if(!interaction.isModalSubmit()) return;
-			const submittedAddress=interaction.fields.getTextInputValue('walletinput');
+			// add this user in the verification queue
 			
-			//using ephemeral response
-			await interaction.reply({content:'address submitted',ephemeral:true})
-
-
-			// interaction.reply("|");interaction.deleteReply(); // a jugaad since if i do not react to interaction, it says error happend to usre
+			
+			var responseObject=getResponse(interaction,verificationQueue,db);
 
 
 
+			await interaction.reply({content:'address submitted',ephemeral:true});
+			
 
 		});
 
 	}
 }
 
+async function getResponse(interaction,verificationQueue,db){
+	const user_tag = interaction.member.user.tag;
+	const submittedAddress=interaction.fields.getTextInputValue('walletinput');
+
+	
+
+
+
+
+	
+
+}
 
 
 async function getModal(){ // form to get wallet information from user

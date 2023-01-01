@@ -35,9 +35,16 @@
 Assuming addresses to be shelley since stakeAddress  is used to identify unique addresses.
 one wallet should only be associated with one discord account and vice versa.  
 
-Ephemeral responses should be used for communication insteda of private threads
+Ephemeral responses should be used for communication insteda of private threads  
+
+Assumption that the user will be submitting the right address and not some mumbo jumbo.
+
 
 - install nedb and instantiate it
 - make a new directory, add file for button interaction handling there
 - after button interaction, a popup should come for user for wallet verification
-- If person is already present in database , then do nothing
+- member should be added to verification queue on pressing verify button abd inputting the address
+- On getting added to verification queue, following tests should take place for the modal submission
+	- presence of user in queue
+	- presence of user in database **ne documents will contain two fields = _id and address which will contain user tag and stakeAddress respectively**
+	- presence of address in database - addresses will be

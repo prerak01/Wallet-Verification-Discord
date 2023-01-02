@@ -1,5 +1,5 @@
 const {Events,ModalBuilder,ActionRowBuilder,TextInputBuilder,TextInputStyle} =  require('discord.js');
-
+const {project_id}=require(./.config.json);
 
 
 module.exports = {
@@ -14,34 +14,43 @@ module.exports = {
 		// event after wallet has been submitted
 		client.on(Events.InteractionCreate,async interaction=>{
 			if(!interaction.isModalSubmit()) return;
+			await pvtReply(interaction,'Address submitted');
 			// add this user in the verification queue
-			
-			
-			var responseObject=getResponse(interaction,verificationQueue,db);
-
-
-
-			await interaction.reply({content:'address submitted',ephemeral:true});
-			
-
+			verifyData(interaction,verificationQueue,db);
 		});
 
 	}
 }
 
-async function getResponse(interaction,verificationQueue,db){
+async function verifyData(interaction,verificationQueue,db){
 	const user_tag = interaction.member.user.tag;
 	const submittedAddress=interaction.fields.getTextInputValue('walletinput');
-
+	const userStakeAddress=
 	
+	// add user in verification queue
+	if(user_tag in verificationQueue){
+		pvtReply(interaction,'user already in verification queue');
+		return;
+	}
+	verificationQueue.user_tag="in progress";
+
+	// checking uniqueness in database
+	db.find({ $or : [{_id:user_tag},{stake_address:submittedAddress}]} , function (err,docs){
+		if(docs.length>0){
+			await pvtReply(interaction,'Either the discord user or address is already verified');
+			delete verificationQueue.user_tag;
+		}
+		else{
 
 
 
-
-	
-
+		}
+	});
 }
 
+async function pvtReply(interaction,text){
+	await interaction.reply({content:text,ephemeral:true});
+}
 
 async function getModal(){ // form to get wallet information from user
 	const modal = new ModalBuilder()

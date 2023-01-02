@@ -6,7 +6,7 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 //part 2
 const {ButtonHandler} = require('./EventHandling/button.js');
-verificationQueue = []// will contain all the users which are in the queue to be verified
+verificationQueue = {}// will contain all the users which are in the queue to be verified
 
 //database intialization
 const DataStore=require('nedb');

@@ -48,4 +48,6 @@ Assumption that the user will be submitting the right address and not some mumbo
 	- presence of user in queue
 	- presence of user in database  
 	**database documents will contain two fields = _id and address which will contain user tag and stakeAddress respectively**
-	- presence of address in database - addresses will be
+	- presence of address in database - addresses will be  
+
+- cardano stuff starts now, add your key in .config.json and import it in the project

@@ -51,4 +51,4 @@ Assumption that the user will be submitting the right address and not some mumbo
 	- presence of address in database - addresses will be  
 
 - cardano stuff starts now, add your key in .config.json and import it in the project
-- npm serialization lib for extracting stake address
+- first tried AXIOS but it is terrible at handling error when requests fails so using node-fetch

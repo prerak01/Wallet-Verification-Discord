@@ -1,20 +1,20 @@
 const {Events,ModalBuilder,ActionRowBuilder,TextInputBuilder,TextInputStyle} =  require('discord.js');
 const {projectid}=require('./../.config.json');
+const needle=require('needle');
+const fetch=require('node-fetch');
 
 
-module.exports = {
-	ButtonHandler: async function(client,verificationQueue,db){
-		// wallet verification popup on button press
-		client.on(Events.InteractionCreate,async interaction=>{
-			if(!interaction.isButton()) return;
-			// add person in verification queue
+module.exports = { ButtonHandler: async function(client,verificationQueue,db){
+// wallet verification popup on button press
+client.on(Events.InteractionCreate,async interaction=>{
+if(!interaction.isButton()) return; // add person in verification queue
 
 			await interaction.showModal(await getModal());
 		});
 		// event after wallet has been submitted
 		client.on(Events.InteractionCreate,async interaction=>{
 			if(!interaction.isModalSubmit()) return;
-			await pvtReply(interaction,'Address submitted');
+			await interaction.reply({'content':'Address submitted','ephemeral':true});
 			// add this user in the verification queue
 			verifyData(interaction,verificationQueue,db);
 		});
@@ -25,20 +25,21 @@ module.exports = {
 async function verifyData(interaction,verificationQueue,db){
 	const user_tag = interaction.member.user.tag;
 	const submittedAddress=interaction.fields.getTextInputValue('walletinput');
+	
 	const userStakeAddress=await getStakeAddress(submittedAddress);
 	console.log(userStakeAddress);
 	// add user in verification queue
 	if(user_tag in verificationQueue){
-		pvtReply(interaction,'user already in verification queue');
+		pvtReply(interaction.channel,'user already in verification queue',);
 		return;
 	}
-	verificationQueue.user_tag="in progress";
+	verificationQueue[user_tag]="in progress";
 
 	// checking uniqueness in database
 	db.find({ $or : [{_id:user_tag},{stake_address:submittedAddress}]} , function (err,docs){
 		if(docs.length>0){
 			pvtReply(interaction,'Either the discord user or address is already verified');
-			delete verificationQueue.user_tag;
+			delete verificationQueue[user_tag];
 		}
 		else{
 
@@ -49,15 +50,17 @@ async function verifyData(interaction,verificationQueue,db){
 	});
 }
 async function getStakeAddress(address){
-	return await fetch('https://cardano-preview.blockfrost.io/api/v0/addresses/${address}',{
+	var base_api="https://cardano-preview.blockfrost.io/api/v0/addresses/"+address;
+	const response=await fetch(base_api,{
 		headers:{
-			project_id:projectid
+			'project_id':projectid
 		}
 	});
-}
 
-async function pvtReply(interaction,text){
-	await interaction.reply({content:text,ephemeral:true});
+	return response.json();
+}
+async function pvtReply(channel,text,user){
+	await channel.send({content:text,ephemeral:true});
 }
 
 async function getModal(){ // form to get wallet information from user
@@ -72,7 +75,6 @@ async function getModal(){ // form to get wallet information from user
 	modal.addComponents(actionRow);
 
 	return modal;
-
 }
 /*
 

@@ -43,7 +43,7 @@ async function verifyData(interaction,verificationQueue,db){
 			delete verificationQueue[user_tag];
 		}
 		else{
-			var randomAmount=Math.random().toFixed()+1;
+			var randomAmount=Math.random().toFixed(6)+1;
 			pvtReply(interaction,'Send ${randomAmount} from your wallet to your own wallet to start verification. This may take upto 30 minutes.',true);
 
 			verifyWallet(interaction,randomAmount,userStakeAddress);

@@ -1,3 +1,4 @@
+
 # LOGS
 
 ## Setup
@@ -56,3 +57,7 @@ Assumption that the user will be submitting the right address and not some mumbo
 - wake up after 30 minutes and iterate through the user's transactions upto the block number when the program slept. doing this using unix time
 - for transaction to be valid, all inputs should be from the same stake address and output should include the address to be checked with the appropriate lovelace in that address
 	- there can be more than one output to that address but atleast one should have the specified amount output
+- if both input and output condition valid, save in database and assign role (whale on > 100 ADA) depending on amount
+- if failure only remove from queue
+- send appropriate messages
+- remove from queue

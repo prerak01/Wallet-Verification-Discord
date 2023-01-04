@@ -80,11 +80,9 @@ async function verifyWallet(interaction,randomAmount,submittedAddress,verificati
 
 		if(await verify(transaction,randomAmount,submittedAddress)){
 			success=true;
-			console.log("Success");
 			break;
 		}
 	}
-
 	if(success)
 		success();
 	else{
@@ -137,7 +135,9 @@ async function verify(hash,randomAmount,submittedAddress){
 
 	return success&&randomCondition;
 }
-function success(){
+function success(interaction,submittedAddress){
+	
+
 
 }
 function failure(){

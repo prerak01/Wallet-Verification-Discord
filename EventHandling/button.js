@@ -5,6 +5,15 @@ const fetch=require('node-fetch');
 const sleepTime=30*60;
 
 
+const base_api="https://cardano-preview.blockfrost.io/api/v0/";
+const header= 
+{
+	headers:
+	{
+		project_id:projectid
+	}
+}
+
 module.exports = { ButtonHandler: async function(client,verificationQueue,db){
 // wallet verification popup on button press
 client.on(Events.InteractionCreate,async interaction=>{
@@ -47,34 +56,31 @@ async function verifyData(interaction,verificationQueue,db){
 			var randomAmount=Math.random();
 			randomAmount+=2;
 			randomAmount=randomAmount.toFixed(6); 
-			
+			var curBlock= getBlock();			
 			pvtReply(interaction,"Send "+randomAmount+" ADA from your wallet to your own wallet to start verification. This may take upto 30 minutes.",true);
 			
 			setTimeout( verifyWallet(interaction,randomAmount,userStakeAddress,verificationQueue), sleepTime ); /*30 minutes*/
 
-			verifyWallet(interaction,randomAmount,userStakeAddress,verificationQueue);
+			
 		}
 	});
 }
 
-function verifyWallet(interaction,randomAmount,userStakeAddress,verificationQueue){
-	var base_api="https://cardano-preview.blockfrost.io/api/v0/addresses/"+address;
-	transactions=[]
-	page=1
-	var response=await fetch(base_api,)
-
+async function verifyWallet(interaction,randomAmount,userStakeAddress,verificationQueue){
+	
 	
 	return;
 
 }
+async function getBlock(){
+	var api=base_api+"blocks/latest";
+	const resposne=await fetch(api,header);
+	return (response.json())["height"];
+}
 
 async function getStakeAddress(address){
-	var base_api="https://cardano-preview.blockfrost.io/api/v0/addresses/"+address;
-	const response=await fetch(base_api,{
-		headers:{
-			'project_id':projectid
-		}
-	});
+	var api=base_api+"addresses/"+address;
+	const response=await fetch(base_api,header);
 	if(!response.ok)
 		return "invalid";
 	return (await response.json())['stake_address'];

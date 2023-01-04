@@ -56,34 +56,74 @@ async function verifyData(interaction,verificationQueue,db){
 			var randomAmount=Math.random();
 			randomAmount+=2;
 			randomAmount=randomAmount.toFixed(6); 
-			var curBlock= getBlock();			
-			pvtReply(interaction,"Send "+randomAmount+" ADA from your wallet to your own wallet to start verification. This may take upto 30 minutes.",true);
+			var callTime=Date.now(); // unix time			
+
+			pvtReply(interaction,"Send "+randomAmount+" ADA from your wallet to the submitted address to start verification. This may take upto 30 minutes.",true);
 			
-			setTimeout( verifyWallet(interaction,randomAmount,userStakeAddress,verificationQueue), sleepTime ); /*30 minutes*/
+			setTimeout( function (){
+				verifyWallet(interaction,randomAmount,submittedAddress,verificationQueue,callTime)
+			}
+			, sleepTime ); /*30 minutes*/
 
 			
 		}
 	});
 }
 
-async function verifyWallet(interaction,randomAmount,userStakeAddress,verificationQueue){
+async function verifyWallet(interaction,randomAmount,submittedAddress,verificationQueue,callTime){
+
+	var transactions=await getTransactions(submittedAddress,callTime);
+	console.log(transactions);
 	
+
 	
 	return;
 
 }
+
+
+async function getTransactions(submittedAddress,callTime){
+	var transactions=[]
+	var page=1;
+	var api=base_api+"addresses/"+submittedAddress+"/transactions?order=desc&page="+String(page);
+	var response=await fetch(api,header);
+	var brek=false;
+	while(!brek){
+		var json = await response.json();
+		// an array of transaction objects
+		if(json.length==0)
+			brek=true;
+		for(const transaction of json ){
+			if(transaction['block_time']<callTime){
+				brek=true;
+				break;
+			}
+			
+			transactions.push(transaction['tx_hash']);
+
+		};
+		page++;
+		api=base_api+"addresses/"+submittedAddress+"/transactions?order=desc&page="+String(page);
+		response=await fetch(api,header);
+	}
+	return transactions;
+}
 async function getBlock(){
 	var api=base_api+"blocks/latest";
-	const resposne=await fetch(api,header);
-	return (response.json())["height"];
+	const response=await fetch(api,header);
+	return  (await response.json())["height"];
 }
 
 async function getStakeAddress(address){
 	var api=base_api+"addresses/"+address;
-	const response=await fetch(base_api,header);
-	if(!response.ok)
+	const response=await fetch(api,header);
+	if(!response.ok){
 		return "invalid";
-	return (await response.json())['stake_address'];
+	}
+	var json=await response.json();
+	
+
+	return json['stake_address'];
 }
 
 async function pvtReply(interaction,text,followup){

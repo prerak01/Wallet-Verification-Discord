@@ -1,6 +1,5 @@
 const {Events,ModalBuilder,ActionRowBuilder,TextInputBuilder,TextInputStyle} =  require('discord.js');
 const {projectid}=require('./../.config.json');
-const needle=require('needle');
 const fetch=require('node-fetch');
 const sleepTime=60*2*1000;
 
@@ -61,7 +60,7 @@ async function verifyData(interaction,verificationQueue,db){
 			pvtReply(interaction,"Send "+randomAmount+" ADA from your wallet to the submitted address to start verification. This may take upto 30 minutes.",true);
 			
 			setTimeout( function (){
-				verifyWallet(interaction,randomAmount,submittedAddress,verificationQueue,callTime)
+				verifyWallet(interaction,randomAmount,submittedAddress,verificationQueue,callTime,db)
 			}
 			, sleepTime ); /*30 minutes*/
 
@@ -70,7 +69,7 @@ async function verifyData(interaction,verificationQueue,db){
 	});
 }
 
-async function verifyWallet(interaction,randomAmount,submittedAddress,verificationQueue,callTime){
+async function verifyWallet(interaction,randomAmount,submittedAddress,verificationQueue,callTime,db){
 
 	var transactions=await getTransactions(submittedAddress,callTime);
 	console.log(transactions);
@@ -84,11 +83,10 @@ async function verifyWallet(interaction,randomAmount,submittedAddress,verificati
 		}
 	}
 	if(success)
-		success();
-	else{
-		console.log("failure");
+		success(interaction,submittedAddress,db,verificationQueue);
+	else
 		failure();
-	}
+	
 
 }
 async function verify(hash,randomAmount,submittedAddress){
@@ -135,8 +133,14 @@ async function verify(hash,randomAmount,submittedAddress){
 
 	return success&&randomCondition;
 }
-function success(interaction,submittedAddress){
+async function success(interaction,submittedAddress,db, verificationQueue){
+	var stakeAddress=await getStakeAddress(submittedAddress);
+	const user_tag = interaction.member.user.tag;
+
+	db.insert({"_id": user_tag,stake_address:stakeAddress});
+	delete verificationQueue[user_tag];
 	
+
 
 
 }

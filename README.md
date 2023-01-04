@@ -60,4 +60,10 @@ Assumption that the user will be submitting the right address and not some mumbo
 - if both input and output condition valid, save in database and assign role (whale on > 100 ADA) depending on amount
 - if failure only remove from queue
 - send appropriate messages
-- remove from queue
+- remove from queue  
+
+## Optional part 3
+
+- video was getting too long, so this part is going to focus on assigning whale tag to users
+- at the end of the success function, another function needs to be added which would fetch balance of all the addresses of the user stake address and accordingly assign whale tag
+- once whale tag is assigned, the user will have access to the whale only text room  

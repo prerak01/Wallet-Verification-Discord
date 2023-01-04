@@ -8,13 +8,12 @@ module.exports = { ButtonHandler: async function(client,verificationQueue,db){
 // wallet verification popup on button press
 client.on(Events.InteractionCreate,async interaction=>{
 if(!interaction.isButton()) return; // add person in verification queue
-
 			await interaction.showModal(await getModal());
 		});
 		// event after wallet has been submitted
 		client.on(Events.InteractionCreate,async interaction=>{
 			if(!interaction.isModalSubmit()) return;
-			await interaction.reply({'content':'Address submitted','ephemeral':true});
+			await pvtReply(interaction,'Address submitted',false)
 			// add this user in the verification queue
 			verifyData(interaction,verificationQueue,db);
 		});
@@ -25,30 +24,41 @@ if(!interaction.isButton()) return; // add person in verification queue
 async function verifyData(interaction,verificationQueue,db){
 	const user_tag = interaction.member.user.tag;
 	const submittedAddress=interaction.fields.getTextInputValue('walletinput');
-	
 	const userStakeAddress=await getStakeAddress(submittedAddress);
-	console.log(userStakeAddress);
+
+	if(userStakeAddress=="invalid"){
+		await pvtReply(interaction,'invalid address',true);
+		return;
+	}
 	// add user in verification queue
 	if(user_tag in verificationQueue){
-		pvtReply(interaction.channel,'user already in verification queue',);
+		await pvtReply(interaction,'user already in verification queue',true);
 		return;
 	}
 	verificationQueue[user_tag]="in progress";
-
 	// checking uniqueness in database
 	db.find({ $or : [{_id:user_tag},{stake_address:submittedAddress}]} , function (err,docs){
 		if(docs.length>0){
-			pvtReply(interaction,'Either the discord user or address is already verified');
+			pvtReply(interaction,'Either the discord user or address is already verified',true);
 			delete verificationQueue[user_tag];
 		}
 		else{
+			var randomAmount=Math.random().toFixed()+1;
+			pvtReply(interaction,'Send ${randomAmount} from your wallet to your own wallet to start verification. This may take upto 30 minutes.',true);
 
+			verifyWallet(interaction,randomAmount,userStakeAddress);
 
 
 
 		}
 	});
 }
+
+function verifyWallet(interaction,randomAmount,userStakeAddress){
+	return;
+
+}
+
 async function getStakeAddress(address){
 	var base_api="https://cardano-preview.blockfrost.io/api/v0/addresses/"+address;
 	const response=await fetch(base_api,{
@@ -56,11 +66,16 @@ async function getStakeAddress(address){
 			'project_id':projectid
 		}
 	});
-
-	return response.json();
+	if(!response.ok)
+		return "invalid";
+	return (await response.json())['stake_address'];
 }
-async function pvtReply(channel,text,user){
-	await channel.send({content:text,ephemeral:true});
+
+async function pvtReply(interaction,text,followup){
+	if(!followup)
+		await interaction.reply({content:text,ephemeral:true});
+	else
+		await interaction.followUp({content:text,ephemeral:true});
 }
 
 async function getModal(){ // form to get wallet information from user

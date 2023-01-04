@@ -2,7 +2,7 @@ const {Events,ModalBuilder,ActionRowBuilder,TextInputBuilder,TextInputStyle} =  
 const {projectid}=require('./../.config.json');
 const needle=require('needle');
 const fetch=require('node-fetch');
-const sleepTime=30*60;
+const sleepTime=60*2*1000;
 
 
 const base_api="https://cardano-preview.blockfrost.io/api/v0/";
@@ -56,7 +56,7 @@ async function verifyData(interaction,verificationQueue,db){
 			var randomAmount=Math.random();
 			randomAmount+=2;
 			randomAmount=randomAmount.toFixed(6); 
-			var callTime=Date.now(); // unix time			
+			var callTime=Math.floor(Date.now()/1000); // unix time in seconds, blockfrost also returns in seconds			
 
 			pvtReply(interaction,"Send "+randomAmount+" ADA from your wallet to the submitted address to start verification. This may take upto 30 minutes.",true);
 			
@@ -74,10 +74,73 @@ async function verifyWallet(interaction,randomAmount,submittedAddress,verificati
 
 	var transactions=await getTransactions(submittedAddress,callTime);
 	console.log(transactions);
-	
+	var success=false;
 
+	for(const transaction of transactions){
+
+		if(await verify(transaction,randomAmount,submittedAddress)){
+			success=true;
+			console.log("Success");
+			break;
+		}
+	}
+
+	if(success)
+		success();
+	else{
+		console.log("failure");
+		failure();
+	}
+
+}
+async function verify(hash,randomAmount,submittedAddress){
+	const userStakeAddress=await getStakeAddress(submittedAddress);
+	var api=base_api+"txs/"+hash+"/utxos";
+	var success=true,randomCondition=false;
+	const response=await fetch(api,header);
+	const json=await response.json();
+	var inputs=json['inputs'],outputs=json['outputs'];
+
+
+
+	for(const input of inputs){
+		success=success&&(await getStakeAddress(input['address'])) == userStakeAddress;
+	}
 	
-	return;
+	for(let i=0;i<outputs.length;i++){
+		var output=outputs[i];
+		var curAddress=output['address'];
+		if(curAddress==submittedAddress){
+			
+
+			for(let j=0;j<output['amount'].length;j++){
+				var asset=(output['amount'][j]);
+				if(asset['unit']=='lovelace'){
+					randomCondition=randomCondition||(String(Math.floor(parseFloat(randomAmount)*1000000))==asset['quantity'])
+				}
+			}
+			
+		}
+	}
+
+
+
+
+
+	if(!success)
+		console.log("input failure");
+	if(!randomCondition)
+		console.log("random condition");
+
+
+
+
+	return success&&randomCondition;
+}
+function success(){
+
+}
+function failure(){
 
 }
 
@@ -95,10 +158,15 @@ async function getTransactions(submittedAddress,callTime){
 			brek=true;
 		for(const transaction of json ){
 			if(transaction['block_time']<callTime){
+
+				// console.log(transaction['block_time']);
+				// console.log(callTime);
+				// console.log(transaction['block_time']-callTime);
 				brek=true;
 				break;
 			}
-			
+			// above commened out only for testing
+
 			transactions.push(transaction['tx_hash']);
 
 		};
@@ -143,13 +211,21 @@ async function getModal(){ // form to get wallet information from user
 		.setStyle(TextInputStyle.Short);
 	const actionRow=new ActionRowBuilder().addComponents(walletInput);
 	modal.addComponents(actionRow);
-
 	return modal;
 }
 /*
 
 
 addr_test1qzucx7ndcutltm7z63hqr69sy79v9pv85h06h9d2alnl59y5fqtf5qdql69mszhtvwt44sy4hz407r43qmxnupyggn4q62nn77
+				
+				// if(asset['unit']=="lovelace"){
+				// 	console.log('lovelace present');
+				// 	console.log(asset['quantity']);
+				// 	console.log(String(Math.trunc(parseFloat(randomAmount)*1000000)));
 
+				// 	randomCondition=randomCondition||(asset['quantity']==String(Math.trunc(parseFloat(randomAmount)*1000000)))
+
+				
+				// }
 
 */

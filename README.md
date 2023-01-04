@@ -37,7 +37,7 @@ one wallet should only be associated with one discord account and vice versa.
 
 Ephemeral responses should be used for communication insteda of private threads  
 
-Assumption that the user will be submitting the right address and not some mumbo jumbo.
+Assumption that the user will be submitting the right address and not some mumbo jumbo.  
 
 
 - install nedb and instantiate it
@@ -53,3 +53,5 @@ Assumption that the user will be submitting the right address and not some mumbo
 - cardano stuff starts now, add your key in .config.json and import it in the project
 - first tried AXIOS but it is terrible at handling error when requests fails so using node-fetch
 - if address is invalid, exit else give the user 30 minutes to send transaction after display of random amount(upto 6 digits)
+- wake up after 30 minutes and iterate through the user's transactions upto the block number when the program slept
+- for transaction to be valid, all inputs should be from the same stake address and output should include the address to be checked with the appropriate lovelace in that address

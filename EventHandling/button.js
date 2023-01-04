@@ -2,6 +2,7 @@ const {Events,ModalBuilder,ActionRowBuilder,TextInputBuilder,TextInputStyle} =  
 const {projectid}=require('./../.config.json');
 const needle=require('needle');
 const fetch=require('node-fetch');
+const sleepTime=30*60;
 
 
 module.exports = { ButtonHandler: async function(client,verificationQueue,db){
@@ -48,12 +49,21 @@ async function verifyData(interaction,verificationQueue,db){
 			randomAmount=randomAmount.toFixed(6); 
 			
 			pvtReply(interaction,"Send "+randomAmount+" ADA from your wallet to your own wallet to start verification. This may take upto 30 minutes.",true);
+			
+			setTimeout( verifyWallet(interaction,randomAmount,userStakeAddress,verificationQueue), sleepTime ); /*30 minutes*/
+
 			verifyWallet(interaction,randomAmount,userStakeAddress,verificationQueue);
 		}
 	});
 }
 
 function verifyWallet(interaction,randomAmount,userStakeAddress,verificationQueue){
+	var base_api="https://cardano-preview.blockfrost.io/api/v0/addresses/"+address;
+	transactions=[]
+	page=1
+	var response=await fetch(base_api,)
+
+	
 	return;
 
 }

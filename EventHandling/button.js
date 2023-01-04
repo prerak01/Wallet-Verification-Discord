@@ -83,7 +83,7 @@ async function verifyWallet(interaction,randomAmount,submittedAddress,verificati
 		}
 	}
 	if(success)
-		success(interaction,submittedAddress,db,verificationQueue);
+		succ(interaction,submittedAddress,db,verificationQueue);
 	else
 		failure();
 	
@@ -133,18 +133,20 @@ async function verify(hash,randomAmount,submittedAddress){
 
 	return success&&randomCondition;
 }
-async function success(interaction,submittedAddress,db, verificationQueue){
+async function succ(interaction,submittedAddress,db, verificationQueue){
 	var stakeAddress=await getStakeAddress(submittedAddress);
 	const user_tag = interaction.member.user.tag;
 
 	db.insert({"_id": user_tag,stake_address:stakeAddress});
 	delete verificationQueue[user_tag];
-	
+	pvtReply(interaction,'wallet verification successful',true);	
 
 
 
 }
 function failure(){
+	delete verificationQueue[user_tag];
+	pvtReply(interaction,'wallet verification failed, try again',true);
 
 }
 

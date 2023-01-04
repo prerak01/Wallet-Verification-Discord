@@ -43,18 +43,17 @@ async function verifyData(interaction,verificationQueue,db){
 			delete verificationQueue[user_tag];
 		}
 		else{
-			var randomAmount=Math.random().toFixed(6)+1;
-			pvtReply(interaction,'Send ${randomAmount} from your wallet to your own wallet to start verification. This may take upto 30 minutes.',true);
-
-			verifyWallet(interaction,randomAmount,userStakeAddress);
-
-
-
+			var randomAmount=Math.random();
+			randomAmount+=2;
+			randomAmount=randomAmount.toFixed(6); 
+			
+			pvtReply(interaction,"Send "+randomAmount+" ADA from your wallet to your own wallet to start verification. This may take upto 30 minutes.",true);
+			verifyWallet(interaction,randomAmount,userStakeAddress,verificationQueue);
 		}
 	});
 }
 
-function verifyWallet(interaction,randomAmount,userStakeAddress){
+function verifyWallet(interaction,randomAmount,userStakeAddress,verificationQueue){
 	return;
 
 }

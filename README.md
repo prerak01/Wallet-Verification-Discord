@@ -31,7 +31,7 @@
 2. on client ready, send a hello world to stdout, then iterate through all the guilds the bot is in
 3. check for channel wallet_verification and send a message if not already sent
 
-## Ideally be part 2 of the tutorial 
+## Ideally be part 2
 
 Assuming addresses to be shelley since stakeAddress  is used to identify unique addresses.
 one wallet should only be associated with one discord account and vice versa.  

@@ -1,5 +1,5 @@
 
-# LOGS
+Video Walk Through can be found on [Youtube](https://youtu.be/-V3BqrDfZzQ)
 
 ## Setup
 
